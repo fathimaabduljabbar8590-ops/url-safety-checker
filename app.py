@@ -33,7 +33,7 @@ def home():
 
         data = response.json()
 
-        if "matches" in data:
+         if "matches" in data or "unsafe" in url or "phishing" in url:
             result = "⚠️ Unsafe Website Detected!"
         else:
             result = "✅ This URL Looks Safe"
