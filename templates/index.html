@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>URL Safety Checker</title>
 
+    <style>
+        body{
+            font-family: Arial;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .container{
+            background: white;
+            width: 400px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+
+        input{
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        button{
+            padding: 10px 20px;
+            margin-top: 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        h2{
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🛡️ URL Safety Checker</h1>
+
+    <form method="POST">
+        <input type="text" name="url" placeholder="Enter URL">
+        <br>
+        <button type="submit">Check URL</button>
+    </form>
+
+    {% if result %}
+        {% if 'Safe' in result %}
+            <h2 style="color: green;">{{ result }}</h2>
+        {% else %}
+            <h2 style="color: red;">{{ result }}</h2>
+        {% endif %}
+    {% endif %}
+
+    <hr>
+
+    <h3>⚠️ How to Spot Phishing Websites</h3>
+
+    <ul style="text-align:left;">
+        <li>Check if the URL starts with https://</li>
+        <li>Look for spelling mistakes in the domain name</li>
+        <li>Avoid clicking suspicious links from unknown messages</li>
+        <li>Do not enter passwords on untrusted websites</li>
+    </ul>
+
+    <p style="margin-top:30px; color:gray;">
+        Developed using Flask & Google Safe Browsing API
+    </p>
+
+</div>
+
+</body>
+</html>
