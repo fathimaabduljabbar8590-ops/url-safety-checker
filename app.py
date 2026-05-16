@@ -1,44 +1,38 @@
 from flask import Flask, render_template, request
-import requests
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 
-API_KEY = "AIzaSyC97PdfVPtT6t1h5y4NkZ_yPfVLl3WezPI"
+# Function to check valid URL
+def is_valid_url(url):
+    parsed = urlparse(url)
+    return all([parsed.scheme, parsed.netloc])
 
-@app.route('/', methods=['GET', 'POST'])
+# Function to check suspicious keywords
+def check_url(url):
+    suspicious_keywords = ["login", "verify", "bank", "secure", "free", "prize"]
+
+    # Check if URL is valid
+    if not is_valid_url(url):
+        return "Invalid or Unsafe URL", "red"
+
+    # Check suspicious words
+    for word in suspicious_keywords:
+        if word in url.lower():
+            return "Unsafe URL Detected!", "red"
+
+    return "Safe URL", "green"
+
+@app.route("/", methods=["GET", "POST"])
 def home():
     result = ""
+    color = ""
 
-    if request.method == 'POST':
-        url = request.form['url']
+    if request.method == "POST":
+        url = request.form["url"]
+        result, color = check_url(url)
 
-        api_url = f"https://safebrowsing.googleapis.com/v4/threatMatches:find?key={API_KEY}"
+    return render_template("index.html", result=result, color=color)
 
-        payload = {
-            "client": {
-                "clientId": "url-safety-checker",
-                "clientVersion": "1.0"
-            },
-            "threatInfo": {
-                "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING"],
-                "platformTypes": ["ANY_PLATFORM"],
-                "threatEntryTypes": ["URL"],
-                "threatEntries": [
-                    {"url": url}
-                ]
-            }
-        }
-
-        response = requests.post(api_url, json=payload)
-
-        data = response.json()
-
-        if "matches" in data or "unsafe" in url or "phishing" in url:
-            result = "⚠️ Unsafe Website Detected!"
-        else:
-            result = "✅ This URL Looks Safe"
-
-    return render_template('index.html', result=result)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
