@@ -55,13 +55,11 @@
         <button type="submit">Check URL</button>
     </form>
 
-    {% if result %}
-        {% if 'Safe' in result %}
-            <h2 style="color: green;">{{ result }}</h2>
-        {% else %}
-            <h2 style="color: red;">{{ result }}</h2>
-        {% endif %}
-    {% endif %}
+    {% if color == "green" %}
+<h2 style="color:green;">{{ result }}</h2>
+{% else %}
+<h2 style="color:red;">{{ result }}</h2>
+{% endif %}
 
     <hr>
 
